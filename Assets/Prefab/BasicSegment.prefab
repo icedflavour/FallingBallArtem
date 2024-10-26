@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4541682165116751732}
   - component: {fileID: 7902240592746416521}
   m_Layer: 0
-  m_Name: FloorSegment
+  m_Name: BasicSegment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
