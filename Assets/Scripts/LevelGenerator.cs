@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
@@ -18,22 +20,48 @@ public class LevelGenerator : MonoBehaviour
 
     private void Start()
     {
+        GenerateLevel();
+    }
+
+    private void GenerateLevel()
+    {
         var LevelInstance = Instantiate(Level);
 
         var ColumnInstance = Instantiate(Column, LevelInstance.transform);
+        ColumnInstance.transform.position = new Vector3(0f, FloorsGap * FloorsNumber * 0.5f, 0f);
+        ColumnInstance.transform.localScale = new Vector3(2f, FloorsGap * FloorsNumber * 0.5f, 2f);
 
-        ColumnInstance.transform.position = new Vector3(0f, FloorsGap * (FloorsNumber + 2) * 0.25f, 0f);
-        ColumnInstance.transform.localScale = new Vector3(2f, FloorsGap * (FloorsNumber + 2) * 0.25f, 2f);
+        GenerateFloors(LevelInstance);
+    }
 
+    private void GenerateFloors(GameObject levelObject)
+    {
         for (int i = 0; i < FloorsNumber; i++)
         {
             var floorSpawnPosition = new Vector3(0.0f, i * FloorsGap, 0.0f);
-            var FloorInstance = Instantiate(Floor, floorSpawnPosition, Quaternion.identity, LevelInstance.transform);
+            var FloorInstance = Instantiate(Floor, floorSpawnPosition, Quaternion.identity, levelObject.transform);
+
+            var gapBasis = Random.Range(0, SegmentsNumber);
+            int[] gapIndexes = new int[5]; // switch to level difficulty
+            int indexIncrement = -2;
+
+            for (int index = 0; index < gapIndexes.Length; index++)
+            {
+                gapIndexes[index] = gapBasis - indexIncrement;
+                indexIncrement++;
+            }
 
             for (int j = 0; j < SegmentsNumber; j++)
             {
-                var floorSegmentInstance = Instantiate(BasicSegment, floorSpawnPosition, Quaternion.identity, FloorInstance.transform);
-                floorSegmentInstance.transform.Rotate(0.0f, AngleDiff * j, 0.0f, Space.Self);
+                if (gapIndexes.Contains(j))
+                {
+                    continue;
+                } 
+                else
+                {
+                    var floorSegmentInstance = Instantiate(BasicSegment, floorSpawnPosition, Quaternion.identity, FloorInstance.transform);
+                    floorSegmentInstance.transform.Rotate(0.0f, AngleDiff * j, 0.0f, Space.Self);
+                }
             }
         }
     }

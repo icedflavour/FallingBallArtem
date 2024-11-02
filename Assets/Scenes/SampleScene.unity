@@ -343,7 +343,7 @@ MonoBehaviour:
   BasicSegment: {fileID: 1817755535450398502, guid: b7066183552ac4d418b07339588c9759, type: 3}
   KillSegment: {fileID: 0}
   GlassSegment: {fileID: 0}
-  FloorsNumber: 12
+  FloorsNumber: 1
   FloorsGap: 10
   SegmentsNumber: 24
   AngleDiff: 15
