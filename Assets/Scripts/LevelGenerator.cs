@@ -43,12 +43,10 @@ public class LevelGenerator : MonoBehaviour
 
             var gapBasis = Random.Range(0, SegmentsNumber);
             int[] gapIndexes = new int[5]; // switch to level difficulty
-            int indexIncrement = -2;
 
             for (int index = 0; index < gapIndexes.Length; index++)
             {
-                gapIndexes[index] = gapBasis - indexIncrement;
-                indexIncrement++;
+                gapIndexes[index] = (gapBasis + index) % SegmentsNumber;
             }
 
             for (int j = 0; j < SegmentsNumber; j++)
