@@ -16,12 +16,53 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private int FloorsGap;
     [SerializeField] private int SegmentsNumber;
     [SerializeField] private int AngleDiff;
-    [SerializeField] private int GapDifficulty;
-    [SerializeField] private int KillDifficulty;
+    [SerializeField] private int LevelDifficulty;
+    private int GapDifference;
+    private int GapDifficulty;
+    private int GlassDifficulty;
+    private int KillDifficulty;
 
     private void Start()
     {
         GenerateLevel();
+        ChangeDifficulty(LevelDifficulty);
+    }
+
+    private void ChangeDifficulty(int levelDifficulty)
+    {
+        switch (levelDifficulty)
+        {
+            case 1:
+                GapDifference   = 2;
+                GapDifficulty   = 5;
+                GlassDifficulty = 0;
+                KillDifficulty  = 0;
+                break;
+            case 2:
+                GapDifference   = 4;
+                GapDifficulty   = 5;
+                GlassDifficulty = 0;
+                KillDifficulty  = 2;
+                break;
+            case 3:
+                GapDifference   = 6;
+                GapDifficulty   = 4;
+                GlassDifficulty = 2;
+                KillDifficulty  = 4;
+                break;
+            case 4:
+                GapDifference   = 8;
+                GapDifficulty   = 4;
+                GlassDifficulty = 4;
+                KillDifficulty  = 6;
+                break;
+            case 5:
+                GapDifference   = 10;
+                GapDifficulty   = 3;
+                GlassDifficulty = 6;
+                KillDifficulty  = 8;
+                break;
+        }
     }
 
     private void GenerateLevel()
@@ -43,12 +84,22 @@ public class LevelGenerator : MonoBehaviour
             var floorSpawnPosition = new Vector3(0.0f, i * FloorsGap, 0.0f);
             var floorInstance = Instantiate(Floor, floorSpawnPosition, Quaternion.identity, levelObject.transform);
 
-            var gapBasis = Random.Range(0, SegmentsNumber); // switch to level difficulty
+        //********************* РОЗРАХУНОК GAPS *********************//
+
+            var gapBasis = Random.Range(0, SegmentsNumber);
             int[] gapIndexes = new int[GapDifficulty];
+            
+            for (int index = 0; index < gapIndexes.Length; index++)
+            {
+                gapIndexes[index] = (gapBasis + index) % SegmentsNumber;
+            }
+
+        //**********************************************************//
+
+        //********************** РОЗРАХУНОК KILLBLOCKS **********************//
             int[] killIndexes = new int[KillDifficulty];
             var killBegin = (gapBasis + GapDifficulty) % SegmentsNumber;
 
-            // TASK 3
             for (int j = 0; j < KillDifficulty; j++)
             {
                 var killIndex = (killBegin + Random.Range(0, SegmentsNumber - GapDifficulty)) % SegmentsNumber;
@@ -60,12 +111,9 @@ public class LevelGenerator : MonoBehaviour
 
                 killIndexes[j] = killIndex;
             }
+        //*****************************************************************//
 
-            for (int index = 0; index < gapIndexes.Length; index++)
-            {
-                gapIndexes[index] = (gapBasis + index) % SegmentsNumber;
-            }
-
+        //********************** ЗАПОВНЕННЯ ПОВЕРХУ **********************//
             for (int j = 0; j < SegmentsNumber; j++)
             {
                 if (gapIndexes.Contains(j))
@@ -85,6 +133,7 @@ public class LevelGenerator : MonoBehaviour
                     floorSegmentInstance.GetComponent<Segment>().Index = j; ///
                 }
             }
+        //*****************************************************************//
         }
     }
 }
