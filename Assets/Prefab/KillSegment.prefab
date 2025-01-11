@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7748444698256083007}
   - component: {fileID: 4541682165116751732}
   - component: {fileID: 7902240592746416521}
-  - component: {fileID: -6440609988925515182}
+  - component: {fileID: 9144931706240267438}
   m_Layer: 0
-  m_Name: BasicSegment
+  m_Name: KillSegment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 98754c2a68ed112499b0a397e0b77cf1, type: 2}
+  - {fileID: 2100000, guid: 91917b2ea19b22c4dbf16cf4294c2550, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &-6440609988925515182
+--- !u!114 &9144931706240267438
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -341,12 +341,14 @@ MonoBehaviour:
   Column: {fileID: 8006440736244520390, guid: 55bbc068e5aa1524ab0625a33d7cd08c, type: 3}
   Floor: {fileID: 1165613099514951460, guid: c7e2b2d5ff3272b409b3048e259fa650, type: 3}
   BasicSegment: {fileID: 1817755535450398502, guid: b7066183552ac4d418b07339588c9759, type: 3}
-  KillSegment: {fileID: 0}
+  KillSegment: {fileID: 1817755535450398502, guid: b80f68009bc015245aaada32af2dd344, type: 3}
   GlassSegment: {fileID: 0}
   FloorsNumber: 1
   FloorsGap: 10
   SegmentsNumber: 24
   AngleDiff: 15
+  GapDifficulty: 3
+  KillDifficulty: 3
 --- !u!4 &2084570847
 Transform:
   m_ObjectHideFlags: 0
