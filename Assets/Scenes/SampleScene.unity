@@ -343,12 +343,11 @@ MonoBehaviour:
   BasicSegment: {fileID: 1817755535450398502, guid: b7066183552ac4d418b07339588c9759, type: 3}
   KillSegment: {fileID: 1817755535450398502, guid: b80f68009bc015245aaada32af2dd344, type: 3}
   GlassSegment: {fileID: 0}
-  FloorsNumber: 1
+  FloorsNumber: 30
   FloorsGap: 10
   SegmentsNumber: 24
   AngleDiff: 15
-  GapDifficulty: 3
-  KillDifficulty: 3
+  LevelDifficulty: 5
 --- !u!4 &2084570847
 Transform:
   m_ObjectHideFlags: 0

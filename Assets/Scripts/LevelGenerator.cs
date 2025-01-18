@@ -24,8 +24,8 @@ public class LevelGenerator : MonoBehaviour
 
     private void Start()
     {
-        GenerateLevel();
         ChangeDifficulty(LevelDifficulty);
+        GenerateLevel();
     }
 
     private void ChangeDifficulty(int levelDifficulty)
@@ -70,7 +70,7 @@ public class LevelGenerator : MonoBehaviour
         var levelInstance = Instantiate(Level);
 
         var columnInstance = Instantiate(Column, levelInstance.transform);
-        columnInstance.transform.position = new Vector3(0f, FloorsGap * FloorsNumber * 0.5f, 0f);
+        columnInstance.transform.position = new Vector3(0f, FloorsGap * FloorsNumber * -0.5f, 0f);
         columnInstance.transform.localScale = new Vector3(2f, FloorsGap * FloorsNumber * 0.5f, 2f);
 
         GenerateFloors(levelInstance);
@@ -79,16 +79,18 @@ public class LevelGenerator : MonoBehaviour
 
     private void GenerateFloors(GameObject levelObject)
     {
+        var gapBasis = Random.Range(0, SegmentsNumber); // Вибираємо перший рандомний індекс
+
         for (int i = 0; i < FloorsNumber; i++)
         {
-            var floorSpawnPosition = new Vector3(0.0f, i * FloorsGap, 0.0f);
+            var floorSpawnPosition = new Vector3(0.0f, -i * FloorsGap, 0.0f);
             var floorInstance = Instantiate(Floor, floorSpawnPosition, Quaternion.identity, levelObject.transform);
 
         //********************* РОЗРАХУНОК GAPS *********************//
 
-            var gapBasis = Random.Range(0, SegmentsNumber);
+            gapBasis = (gapBasis + Random.Range(-GapDifference, GapDifference)) % SegmentsNumber;
             int[] gapIndexes = new int[GapDifficulty];
-            
+
             for (int index = 0; index < gapIndexes.Length; index++)
             {
                 gapIndexes[index] = (gapBasis + index) % SegmentsNumber;
@@ -111,6 +113,12 @@ public class LevelGenerator : MonoBehaviour
 
                 killIndexes[j] = killIndex;
             }
+        //*****************************************************************//
+
+        //********************** РОЗРАХУНОК GLASSBLOCKS **********************//
+  
+
+  
         //*****************************************************************//
 
         //********************** ЗАПОВНЕННЯ ПОВЕРХУ **********************//
