@@ -17,15 +17,23 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private int SegmentsNumber;
     [SerializeField] private int AngleDiff;
     [SerializeField] private int LevelDifficulty;
+
     private int GapDifference;
     private int GapDifficulty;
     private int GlassDifficulty;
     private int KillDifficulty;
 
+    private int DebugTotalCount;  //////////// DEBUG
+    private int DebugBasicCount;  //////////// DEBUG
+    private int DebugKillCount;  //////////// DEBUG
+    private int DebugGlassCount; //////////// DEBUG
+
+
     private void Start()
     {
         ChangeDifficulty(LevelDifficulty);
         GenerateLevel();
+        Debug.Log("Kills: " + DebugKillCount + "; Glass: " + DebugGlassCount + "; Basic: " + DebugBasicCount + "; Total: " + DebugTotalCount); //////////// DEBUG
     }
 
     private void ChangeDifficulty(int levelDifficulty)
@@ -70,7 +78,7 @@ public class LevelGenerator : MonoBehaviour
         var levelInstance = Instantiate(Level);
 
         var columnInstance = Instantiate(Column, levelInstance.transform);
-        columnInstance.transform.position = new Vector3(0f, FloorsGap * FloorsNumber * -0.5f, 0f);
+        columnInstance.transform.position = new Vector3(0f, FloorsGap * FloorsNumber * -0.5f + FloorsGap, 0f);
         columnInstance.transform.localScale = new Vector3(2f, FloorsGap * FloorsNumber * 0.5f, 2f);
 
         GenerateFloors(levelInstance);
@@ -88,60 +96,96 @@ public class LevelGenerator : MonoBehaviour
 
         //********************* РОЗРАХУНОК GAPS *********************//
 
-            gapBasis = (gapBasis + Random.Range(-GapDifference, GapDifference)) % SegmentsNumber;
             int[] gapIndexes = new int[GapDifficulty];
-
-            for (int index = 0; index < gapIndexes.Length; index++)
-            {
-                gapIndexes[index] = (gapBasis + index) % SegmentsNumber;
-            }
+            GenerateGaps(gapBasis, gapIndexes);
 
         //**********************************************************//
 
         //********************** РОЗРАХУНОК KILLBLOCKS **********************//
+           
             int[] killIndexes = new int[KillDifficulty];
             var killBegin = (gapBasis + GapDifficulty) % SegmentsNumber;
+            GenerateKill(killIndexes, killBegin);
 
-            for (int j = 0; j < KillDifficulty; j++)
-            {
-                var killIndex = (killBegin + Random.Range(0, SegmentsNumber - GapDifficulty)) % SegmentsNumber;
-
-                while (killIndexes.Contains(killIndex))
-                {
-                    killIndex = (killBegin + Random.Range(0, SegmentsNumber - GapDifficulty)) % SegmentsNumber;
-                }
-
-                killIndexes[j] = killIndex;
-            }
         //*****************************************************************//
+        
 
         //********************** РОЗРАХУНОК GLASSBLOCKS **********************//
-  
-
+             
+            int[] glassIndexes = new int[GlassDifficulty];
+            var glassBegin = (gapBasis + GapDifficulty) % SegmentsNumber;
+            GenerateGlass(glassIndexes, glassBegin, killIndexes);
   
         //*****************************************************************//
 
         //********************** ЗАПОВНЕННЯ ПОВЕРХУ **********************//
             for (int j = 0; j < SegmentsNumber; j++)
             {
+                
                 if (gapIndexes.Contains(j))
                 {
                     continue;
                 }
                 else if (killIndexes.Contains(j))
                 {
-                    var KillSegmentInstance = Instantiate(KillSegment, floorSpawnPosition, Quaternion.identity, floorInstance.transform);
-                    KillSegmentInstance.transform.Rotate(0.0f, AngleDiff * j, 0.0f, Space.Self);
-                    KillSegmentInstance.GetComponent<Segment>().Index = j; ///
+                    SpawnSegment(KillSegment, floorSpawnPosition, j, floorInstance);
+                    DebugKillCount++; //////////// DEBUG
+                }
+                else if (glassIndexes.Contains(j))
+                {
+                    SpawnSegment(GlassSegment, floorSpawnPosition, j, floorInstance);
+                    DebugGlassCount++; //////////// DEBUG
                 }
                 else
                 {
-                    var floorSegmentInstance = Instantiate(BasicSegment, floorSpawnPosition, Quaternion.identity, floorInstance.transform);
-                    floorSegmentInstance.transform.Rotate(0.0f, AngleDiff * j, 0.0f, Space.Self);
-                    floorSegmentInstance.GetComponent<Segment>().Index = j; ///
+                    SpawnSegment(BasicSegment, floorSpawnPosition, j, floorInstance);
+                    DebugBasicCount++; //////////// DEBUG
                 }
             }
         //*****************************************************************//
         }
+    }
+    private void GenerateGaps(int gapBasis, int[] gapIndexes){
+        gapBasis = (gapBasis + Random.Range(-GapDifference, GapDifference)) % SegmentsNumber;
+
+        for (int index = 0; index < gapIndexes.Length; index++)
+        {
+            gapIndexes[index] = (gapBasis + index) % SegmentsNumber;
+        }
+    }
+    private void GenerateKill(int[] killIndexes, int killBegin){
+
+        for (int j = 0; j < KillDifficulty; j++)
+        {
+            var killIndex = (killBegin + Random.Range(0, SegmentsNumber - GapDifficulty)) % SegmentsNumber;
+
+            while (killIndexes.Contains(killIndex))
+            {
+                killIndex = (killBegin + Random.Range(0, SegmentsNumber - GapDifficulty)) % SegmentsNumber;
+            }
+
+            killIndexes[j] = killIndex;
+        }
+    }
+    private void GenerateGlass(int[] glassIndexes, int glassBegin, int[] killIndexes){
+
+        for (int j = 0; j < GlassDifficulty; j++)
+        {
+            var glassIndex = (glassBegin + Random.Range(0, SegmentsNumber - GapDifficulty)) % SegmentsNumber;
+            
+            while (glassIndexes.Contains(glassIndex) || killIndexes.Contains(glassIndex))
+            {
+                glassIndex = (glassBegin + Random.Range(0, SegmentsNumber - GapDifficulty)) % SegmentsNumber;
+            }
+
+            glassIndexes[j] = glassIndex;
+        }
+    }
+    private void SpawnSegment(GameObject segment, Vector3 position, int index, GameObject parent)
+    {
+        var SegmentInstance = Instantiate(segment, position, Quaternion.identity, parent.transform);
+        SegmentInstance.transform.Rotate(0.0f, AngleDiff * index, 0.0f, Space.Self);
+        SegmentInstance.GetComponent<Segment>().Index = index;
+        DebugTotalCount++; //////////// DEBUG
     }
 }

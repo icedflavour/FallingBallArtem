@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 4541682165116751732}
   - component: {fileID: 7902240592746416521}
   - component: {fileID: -6440609988925515182}
-  - component: {fileID: 2453819658286219909}
-  - component: {fileID: 2327609687147559380}
+  - component: {fileID: 544448924397664625}
+  - component: {fileID: -3779843540691734461}
   m_Layer: 0
-  m_Name: BasicSegment
+  m_Name: GlassSegment
   m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 98754c2a68ed112499b0a397e0b77cf1, type: 2}
+  - {fileID: 2100000, guid: 227a5fc6d4591cf44b8b5e065a9e0fef, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Index: 0
---- !u!64 &2453819658286219909
+--- !u!64 &544448924397664625
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,7 +121,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -2124705421725058983, guid: 017dc080f66c8e543a4460cc2bbf3248, type: 3}
---- !u!54 &2327609687147559380
+--- !u!54 &-3779843540691734461
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
